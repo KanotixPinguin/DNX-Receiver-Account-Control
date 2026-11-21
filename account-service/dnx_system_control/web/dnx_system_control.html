@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>DNX Systemsteuerung &middot; Admin</title>
+<link rel="stylesheet" href="__DNX_PREFIX__/system/static/dnx_system_control.css">
+</head>
+<body class="dnxsc">
+
+<header class="dnxsc-header">
+  <div class="dnxsc-title">
+    <span class="dnxsc-logo" aria-hidden="true">DNX</span>
+    <div>
+      <h1>Systemsteuerung</h1>
+      <p class="dnxsc-sub">
+        DNX Receiver Account Control <b>v<span id="dnxsc-version">1.2.0</span></b>
+        &middot; Schalter wirken global in Account-Dienst, Receiver-Frontend,
+        serverseitiger Profilpr&uuml;fung und Audit-Log
+      </p>
+    </div>
+  </div>
+  <div class="dnxsc-head-right">
+    <div class="dnxsc-user">
+      <span class="dnxsc-dot" id="dnxsc-state-dot" title="Verbindung zum Dienst"></span>
+      angemeldet als <b id="dnxsc-user">__DNX_USER__</b>
+      <span class="dnxsc-badge" id="dnxsc-role">__DNX_ROLE__</span>
+    </div>
+    <div class="dnxsc-actions">
+      <button id="dnxsc-reload" class="dnxsc-btn ghost" type="button" title="Ist-Zustand neu vom Dienst laden">Neu laden</button>
+      <button id="dnxsc-reset" class="dnxsc-btn warn" type="button" title="Alle editierbaren Schalter auf Defaults">Defaults</button>
+      <button id="dnxsc-save" class="dnxsc-btn primary" type="button" disabled title="Atomar speichern und auditieren">Speichern</button>
+    </div>
+  </div>
+</header>
+
+<div id="dnxsc-alerts" class="dnxsc-alerts" role="status" aria-live="polite"></div>
+
+<section id="dnxsc-summary" class="dnxsc-summary" aria-label="Lage"></section>
+
+<nav class="dnxsc-nav" id="dnxsc-nav" aria-label="Bereiche"></nav>
+
+<main id="dnxsc-groups" class="dnxsc-groups"></main>
+
+<section id="dnxsc-impact" class="dnxsc-impact" aria-label="Auswirkung auf Bestandskonten"></section>
+
+<footer class="dnxsc-footer">
+  <span>Kein Polling: geladen wird einmal beim &Ouml;ffnen, beim Speichern und auf Knopfdruck.</span>
+  <span id="dnxsc-meta-info"></span>
+</footer>
+
+<div id="dnxsc-modal" class="dnxsc-modal" hidden role="dialog" aria-modal="true" aria-labelledby="dnxsc-modal-title">
+  <div class="dnxsc-modal-box">
+    <h2 id="dnxsc-modal-title">&Auml;nderungen best&auml;tigen</h2>
+    <p class="dnxsc-modal-sub">Die Werte werden atomar in <code>access_settings</code> gespeichert und im Audit-Log protokolliert.</p>
+    <div id="dnxsc-modal-body" class="dnxsc-modal-body"></div>
+    <div class="dnxsc-modal-actions">
+      <button type="button" class="dnxsc-btn ghost" id="dnxsc-modal-cancel">Abbrechen</button>
+      <button type="button" class="dnxsc-btn primary" id="dnxsc-modal-ok">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<script>window.DNX_SYSTEM_BOOTSTRAP = __DNX_BOOTSTRAP__;</script>
+<script>window.DNX_SYSTEM_PREFIX = "__DNX_PREFIX__";</script>
+<script src="__DNX_PREFIX__/system/static/dnx_system_control.js"></script>
+</body>
+</html>

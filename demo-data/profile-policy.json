@@ -1,0 +1,37 @@
+{
+  "protected": [
+    "KW-Schutz",
+    "Admin-only"
+  ],
+  "profiles": {
+    "80m": {
+      "roles": [
+        "user",
+        "extended",
+        "admin"
+      ],
+      "frequency": 3615000
+    },
+    "40m": {
+      "roles": [
+        "user",
+        "extended",
+        "admin"
+      ],
+      "frequency": 7100000
+    },
+    "KW-Schutz": {
+      "roles": [
+        "extended",
+        "admin"
+      ],
+      "frequency": 14200000
+    },
+    "Admin-only": {
+      "roles": [
+        "admin"
+      ],
+      "frequency": 28500000
+    }
+  }
+}
