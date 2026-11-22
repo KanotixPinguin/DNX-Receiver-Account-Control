@@ -258,3 +258,24 @@ gegengeprüft werden (steht so auch in INTEGRATION.md):
 **DE:** Private, inoffizielle Hobby-Anpassung (Mod-Mode) für OpenWebRX / OpenWebRX+. Kein offizielles OpenWebRX- oder OpenWebRX+-Projekt, keine Verbindung zu oder Unterstützung durch die jeweiligen Entwickler. Nutzung erfolgt vollständig auf eigene Gefahr; soweit gesetzlich zulässig wird jede Haftung ausgeschlossen. Vor dem Einspielen bitte Sicherungen anlegen.
 
 **EN:** Private, unofficial hobby modification (Mod-Mode) for OpenWebRX / OpenWebRX+. Not an official OpenWebRX or OpenWebRX+ project; no affiliation with or support from its maintainers. Use entirely at your own risk; to the extent permitted by law, no liability is accepted. Always create backups before installing.
+
+---
+
+## Verbindungen im DNX-Ökosystem, Rechte-Matrix & Benutzer-Persistenz
+
+![DNX Gesamtarchitektur & Verbindungen](docs/dnx-architektur-verbindungen.png)
+![Datenflüsse: Spektrum, 3D-Hintergrund & Speicherung](docs/dnx-datenfluss-speicherung.png)
+
+### Wie die Konten- & Rechte-Schnittstelle alle Module steuert
+
+* **Live-Rechte-Endpunkt (`GET :8095/api/me` + `GET :8096/api/system/state`):** Liefert die effektive Rolle (`guest`, `user`, `extended`, `admin`) sowie **`32` einzelne Werkzeugrechte** an das Receiver-Frontend (`window.DNXReceiverRights.can(...)`), u. a.:
+  * `styler` (schaltet `#dnx-styler-launch`, `#dnx-styler-ui` sowie die Admin-Übernahme-Knöpfe `Standard für alle`, `S-Meter für alle übernehmen` und `Für alle übernehmen` in `DNX-Styler` frei),
+  * `waterfall3d`, `tool3d`, `spectrum_display`, `waterfall_display`, `yellow_hover`, `green_tuning`, `equalizer`, `fx`, `timeline`, `dnx_status`, `novnc`, `remote`,
+  * `profile_switch`, `scanner`, `favorites`, `administration`, `activity24h`, `downloads`, `adsb_*`, `ais_*`, `project_*`.
+* **Ausfallpuffer im Browser (`dnx_rechte_puffer.js`):** Bleibt der Konto-Dienst länger als `6 Sekunden` aus, hält das Frontend-Puffer-Skript die zuletzt bekannten Rechte bis zu **`12 Stunden`** stabil, sodass Oberflächen-Werkzeuge bei Wartungen nicht wegflackern.
+* **Serverseitige Profil-Verifizierung (`owrx/dnx_system_verify.py`):** OpenWebRX+ prüft Profilwechsel direkt gegen `accounts.sqlite3` (`access_settings`) und `profile-policy.json`, sodass API- oder UI-Manipulationen ausgeschlossen sind.
+* **Abgrenzung der Speicherebenen:**
+  1. **Konten, Rollen, Sperren & Profilrechte** liegen in `accounts.sqlite3` (`:8095/:8096`).
+  2. **Persönliche Optiken & Pegel je Band** liegen im Browser (`localStorage`) bzw. pro SDR-Profil (`waterfall_pro.js` + `styler_share.py :8098`).
+  3. **Globale Design-Standards (`Standard für alle`)** verteilt `styler_share.py` (`:8098`) per SSE-Push (`/dnx/styler/events`), sichtbar/auslösbar nur mit dem Recht `styler`.
+  4. **Benutzerbezogene Remote-Workspaces** speichert `DNX-Remote-VIEW` (`:8099`) unter `/save_user/<user>`.
