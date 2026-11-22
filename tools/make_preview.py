@@ -251,7 +251,7 @@ def main() -> int:
         <li>Schalter umlegen, <b>Speichern</b>, <b>Defaults</b>, Validierung, CSRF-Abweisung
             und der Bestätigungs-Diff funktionieren wie im Echtbetrieb – nur eben ohne Datenbank.</li>
         <li>Im Echtbetrieb kommt dieselbe Oberfläche von
-            <code>http://192.0.2.113:8096/admin/system</code>.</li>
+            <code>http://<SERVER-IP>:8096/admin/system</code>.</li>
       </ul></div></div>""")
     # Hinweis AUSSERHALB von #dnxsc-alerts, weil das Panel diesen Bereich leert
     html = html.replace('<section id="dnxsc-summary"', hinweis + '\n<section id="dnxsc-summary"', 1)

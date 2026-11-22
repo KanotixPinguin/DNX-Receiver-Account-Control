@@ -1,6 +1,6 @@
 # INTEGRATION – Systemsteuerung v1.2.0 in die bestehende Anlage einbauen
 
-Zielsystem: `192.0.2.113` · Container `owrx-8013` · Account-Dienst Port 8096
+Zielsystem: `<SERVER-IP>` · Container `owrx-8013` · Account-Dienst Port 8096
 Reihenfolge entspricht Kapitel 13 der Übergabe. Jeder Schritt ist einzeln
 umkehrbar; vor Schritt 1 steht immer ein neues Backup.
 
@@ -13,7 +13,7 @@ umkehrbar; vor Schritt 1 steht immer ein neues Backup.
 ## Schritt 1 – Vollständiges neues Backup
 
 ```bash
-cd <USER_HOME>/dnx-system-control
+cd $HOME/dnx-system-control
 sudo ./scripts/install.sh --dry-run          # zeigt, was gesichert wird
 sudo ./scripts/install.sh                    # legt Backups an + installiert
 ```
@@ -21,7 +21,7 @@ sudo ./scripts/install.sh                    # legt Backups an + installiert
 Backup-Ziel (konfigurierbar über `BACKUP_ROOT`):
 
 ```
-<USER_HOME>/dnx-system-control-backups/<JJJJMMTT-HHMMSS>/
+$HOME/dnx-system-control-backups/<JJJJMMTT-HHMMSS>/
 ├── db/accounts-<Zeitstempel>.sqlite3   # konsistentes sqlite3-Backup
 ├── files/account-service/              # app.py, profile-policy.json, Helfer
 ├── files/plugin/                       # dnx_access.js/.css, dnx_system_state.js, init.js
@@ -33,7 +33,7 @@ Backup-Ziel (konfigurierbar über `BACKUP_ROOT`):
 Zusätzlich das gewohnte Vollbackup der Übergabe ziehen:
 
 ```bash
-sudo tar -czf <USER_HOME>/DNX-Account-Control-Backup-$(date +%Y%m%d-%H%M%S).tar.gz \
+sudo tar -czf $HOME/DNX-Account-Control-Backup-$(date +%Y%m%d-%H%M%S).tar.gz \
   /opt/owrx-docker/var/dnx-access-control /opt/owrx-docker/plugins/receiver
 ```
 
@@ -360,7 +360,7 @@ sqlite3 /opt/owrx-docker/var/dnx-access-control/accounts.sqlite3 'PRAGMA table_i
 ## Schritt 12 – Paket aktualisieren
 
 ```bash
-cd <USER_HOME>/dnx-system-control
+cd $HOME/dnx-system-control
 sha256sum account-service/dnx_system_control/*.py \
           account-service/dnx_system_control/web/* \
           frontend/dnx_access_control/dnx_system_state.js \
@@ -374,7 +374,7 @@ Versionsstände an drei Orten konsistent halten: `settings_store.py`
 
 ## Schritt 13 – Öffentlichen Download und SHA-256 aktualisieren
 
-Im Projekt-Manager (`http://192.0.2.113:8094/`) das Paket
+Im Projekt-Manager (`http://<SERVER-IP>:8094/`) das Paket
 `DNX Receiver Account Control` auf **v1.2.0** setzen, ZIP nach
 `/opt/dnx-project-manager/files` legen und in `projects.sqlite3` registrieren.
 

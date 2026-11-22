@@ -13,7 +13,7 @@ Testkonten (Bezeichnung aus der Übergabe):
 | **E** | `extended` | Standard- + geschützte Profile |
 | **A** | `admin` | alles + Verwaltung |
 
-Kurzbefehle (auf `192.0.2.113`):
+Kurzbefehle (auf `<SERVER-IP>`):
 
 ```bash
 BASE=http://127.0.0.1:8096
@@ -28,8 +28,8 @@ sudo ./scripts/smoke_tests.sh
 
 ## 0. Vorbereitung
 
-- [ ] Vollbackup liegt (`<USER_HOME>/DNX-Account-Control-Backup-*.tar.gz`)
-- [ ] `install.sh`-Backup liegt (`<USER_HOME>/dnx-system-control-backups/<Zeitstempel>/`)
+- [ ] Vollbackup liegt (`$HOME/DNX-Account-Control-Backup-*.tar.gz`)
+- [ ] `install.sh`-Backup liegt (`$HOME/dnx-system-control-backups/<Zeitstempel>/`)
 - [ ] `systemctl is-active dnx-access-control.service` → `active`
 - [ ] `docker ps --filter name=owrx-8013` → läuft
 - [ ] `migrate_add_access_settings.py` meldete „Bestandsuser vor/nach identisch“
@@ -216,7 +216,7 @@ Benutzer ausgesperrt sein. Zeigt das Panel trotzdem „Profilsteuerung AUS
 ## Automatisierter Teil (läuft ohne Server)
 
 ```bash
-cd <USER_HOME>/dnx-system-control
+cd $HOME/dnx-system-control
 python3 -m unittest discover -s tests -t . -v
 ```
 

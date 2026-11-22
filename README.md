@@ -1,4 +1,4 @@
-# DNX Receiver Account Control – Systemsteuerung v1.2.0
+# DNX Receiver Account Control – Systemsteuerung (`v1.2.1`)
 
 <!-- DNX-DISCLAIMER-START -->
 > **Wichtiger Hinweis / Vollständige Distanzierung (Hobby-Mod-Mode)**
@@ -10,18 +10,37 @@
 > - **Reines Hobbyprojekt – frei nutzbar, änderbar & verbreitbar:** Dieses Projekt entsteht ausschließlich aus reinem Hobby und Interesse am gemeinsamen Funk-/SDR-Hobby. Es steht ausdrücklich frei zur Verfügung und darf frei genutzt, weiterverbreitet, verändert und verbessert werden.
 <!-- DNX-DISCLAIMER-END -->
 
-<!-- DNX-PREVIEW-START -->
-## Live-Vorschau
+> **Important Notice / Full Disassociation (Hobby Mod-Mode Only)**
+>
+> - **Full Disassociation:** I completely disassociate myself from **OpenWebRX / OpenWebRX+** and its developers/maintainers. There is no affiliation, endorsement, review, or partnership of any kind.
+> - **No Official/Public OpenWebRX Plugins (Mod-Mode Only):** These files are **not** official or public OpenWebRX plugins, but purely unofficial hobby modifications (*mod-mode*).
+> - **No Public Support & No Warranty:** There is **no public support**, no warranty, and no liability. Use entirely at your own risk.
 
-![Live-Vorschau — DNX Receiver Account Control](docs/preview.png)
+<!-- DNX-PREVIEW-START -->
+## Live-Vorschau & Galerie (`DNX Receiver Account Control`)
+
+![Live-Vorschau — DNX Systemsteuerung](docs/preview.png)
+
+| Ansicht | Beschreibung | Screenshot |
+|---|---|---|
+| **Systemsteuerung (`Kernschalter` & `Rollen`)** | Globale Live-Statusübersicht (13 Status-Pills), `Kernschalter` (Registrierung, Profilsteuerung, Account-Zwang, Gast-Profilwechsel, Wartungsmodus) & `Rollen & Registrierung` | ![Systemsteuerung Kernschalter](docs/preview.png) |
+| **Sicherheitslimits & Audit-Log** | Konfigurierbare Schwellen (`max_login_failures`, Sperrzeit, Rate-Limits, Passwort-Mindestlänge, Bot-Captcha) & Audit-/24h-Aktivitätsgrenzen | ![Sicherheitslimits und Audit](docs/systemsteuerung-limits-audit.png) |
+| **Benutzerverwaltung & Profilrechte** | Kontenverwaltung (`active` / `blocked`, Rolle `admin` / `extended` / `user`) sowie Profil-Mindestrollen pro Empfängerprofil (`Mindestrolle`) | ![Benutzer und Profilrechte](docs/benutzer-und-profilrechte.png) |
+| **Rollen & Werkzeug-Freigaben** | Feingranulare Rechte-Matrix (`Gast`, `User`, `Extended`, `Admin`) einzeln für jedes Empfänger-Werkzeug | ![Rollen und Werkzeug-Freigaben](docs/rollen-werkzeug-freigaben.png) |
+| **Schutz & Sperrverwaltung** | IP- und Konten-Sperren mit Ländererkennung (245 Länder) & automatisch übersetzter Sperrmeldung, Entsperren und Bildschirm-Hinweisen | ![Schutz und Sperrverwaltung](docs/schutz-und-sperrverwaltung.png) |
+| **Admin-Logbuch** | Durchsuchbares Sicherheits- und Ereignis-Logbuch (`login_success`, `profile_switch`, `tool_access`, `ban_create`, `system_settings_save`) inkl. IP, Profil & Frequenz | ![Admin-Logbuch](docs/admin-logbuch.png) |
+| **Öffentliche 24h-Aktivität** | Datenschutzbereinigte 24-Stunden-Übersicht (`/activity`) aktiver Profile, Frequenzen und Modi ohne IP- oder Geräte-Details | ![Aktivität 24h](docs/aktivitaet-24h.png) |
+| **Registrierung & Bot-Schutz** | Self-Service-Registrierung mit serverseitig erzwungener Passwort-Mindestlänge, Rechenaufgabe gegen Bots und Statusleiste | ![Registrierung und Bot-Schutz](docs/registrierung-und-bot-schutz.png) |
 <!-- DNX-PREVIEW-END -->
+
+> **Stand `v1.2.1`:** Einstellungen-Speicher (`settings_store.py`), Integrations-Helfer (`dnx_system_control_integration.py`), Setup-Verdrahtung (`setup_app.py`: Provider, Systemsteuerung-Button) sowie Receiver-Frontend-Status (`dnx_system_state.js`) aktualisiert und gegen bestehende Konten-/Log-Datenbanken abgesichert.
 
 Neuer Admin-Bereich **Systemsteuerung** unter der bestehenden Adminseite: globale
 Schalter, die nicht nur die Oberfläche verändern, sondern **konsistent** wirken in
 
 1. Account-Webdienst (Port 8096)
 2. Receiver-Frontend (OpenWebRX+-Plugin)
-3. serverseitiger OpenWebRX-Profilprüfung (Container `owrx-8013`)
+3. serverseitiger OpenWebRX-Profilprüfung (OpenWebRX-Container (z. B. `openwebrx`))
 4. Audit-/Aktivitätslog
 
 Stand: 13. Oktober 2026 · Basis: Übergabe-PDF `DNX OpenWebRX Übergabe für Admin Systemsteuerung.pdf`
@@ -171,12 +190,12 @@ CSRF, Admin-only, Rate-Limit, Rollen-Herabstufung, Wartungsmodus mit/ohne Bypass
 Profilentscheidungsmatrix (16 Fälle), `profile-policy.json`-Varianten,
 Container-Hook inkl. DSP-Property-Filter.
 
-## 7. Installation auf `192.0.2.113`
+## 7. Installation auf `<SERVER-IP>`
 
 ```bash
 # 0) Übergabe-PDF und aktuelle Backups prüfen (Kapitel 11)
-# 1) Paket auf den Server kopieren, z. B. nach <USER_HOME>/dnx-system-control
-cd <USER_HOME>/dnx-system-control
+# 1) Paket auf den Server kopieren, z. B. nach $HOME/dnx-system-control
+cd $HOME/dnx-system-control
 
 # 2) trocken durchlaufen lassen – zeigt jeden Schritt
 sudo ./scripts/install.sh --dry-run
@@ -196,7 +215,7 @@ sudo systemctl restart dnx-access-control.service
 sudo ./scripts/smoke_tests.sh
 ```
 
-Danach: `http://192.0.2.113:8096/admin/system`
+Danach: `http://<SERVER-IP>:8096/admin/system`
 
 **Rollback**: `sudo ./scripts/rollback.sh --list` → `sudo ./scripts/rollback.sh`
 (Datenbank nur mit `--with-db`, sonst bleiben Konten/Logs unangetastet).
@@ -222,7 +241,7 @@ Alle Details, auch für `init.js`, `connection.py` und `dnx_access_verify.py`:
 
 ## 9. Was ich nicht verifizieren konnte
 
-Die Sandbox hat keinen Zugriff auf `192.0.2.113`. Deshalb sind diese Stellen
+Die Sandbox hat keinen Zugriff auf `<SERVER-IP>`. Deshalb sind diese Stellen
 **tolerant** gebaut, müssen aber beim Einbau einmal gegen die echten Dateien
 gegengeprüft werden (steht so auch in INTEGRATION.md):
 
@@ -232,3 +251,10 @@ gegengeprüft werden (steht so auch in INTEGRATION.md):
 | Aufbau von `profile-policy.json` | Loader versteht `{"protected":[…]}`, `{"profiles":{…roles…}}`, `{"roles":{…}}` und reine Listen; Fehler → keine Sperren |
 | Sitzungsschlüssel in `app.py` | `detect_user()` probiert 7 Benutzer- und 5 Rollenschlüssel, plus DB-Abgleich; eigene Schlüssel sind konfigurierbar |
 | DB-Pfad im Container | `DNX_ACCOUNTS_DB` > `/var/lib/openwebrx/dnx-access-control/accounts.sqlite3` > Host-Pfad |
+
+
+## Rechtlicher Hinweis / Disclaimer
+
+**DE:** Private, inoffizielle Hobby-Anpassung (Mod-Mode) für OpenWebRX / OpenWebRX+. Kein offizielles OpenWebRX- oder OpenWebRX+-Projekt, keine Verbindung zu oder Unterstützung durch die jeweiligen Entwickler. Nutzung erfolgt vollständig auf eigene Gefahr; soweit gesetzlich zulässig wird jede Haftung ausgeschlossen. Vor dem Einspielen bitte Sicherungen anlegen.
+
+**EN:** Private, unofficial hobby modification (Mod-Mode) for OpenWebRX / OpenWebRX+. Not an official OpenWebRX or OpenWebRX+ project; no affiliation with or support from its maintainers. Use entirely at your own risk; to the extent permitted by law, no liability is accepted. Always create backups before installing.

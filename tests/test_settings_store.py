@@ -256,14 +256,14 @@ class StoreTestCase(unittest.TestCase):
         store = SettingsStore(db)
         store.ensure_schema()
         res = store.update({"registration_enabled": False}, actor="dl1abc", role="admin",
-                           ip="198.51.100.1", user_agent="alien-agent")
+                           ip="10.0.0.1", user_agent="alien-agent")
         self.assertTrue(res["audit_written"])
         row = fake_system.rows(
             db, "SELECT action, account_name, client_ip, agent, extra FROM audit_log "
                 "ORDER BY id DESC LIMIT 1")[0]
         self.assertEqual(row[0], AUDIT_EVENT)
         self.assertEqual(row[1], "dl1abc")
-        self.assertEqual(row[2], "198.51.100.1")
+        self.assertEqual(row[2], "10.0.0.1")
         self.assertEqual(row[3], "alien-agent")
         self.assertIn("registration_enabled", row[4])
 
